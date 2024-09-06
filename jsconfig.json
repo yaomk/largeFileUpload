@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json.schemastore.org/jsconfig",
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "target": "ES6",
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "./",
+    "jsx": "preserve",
+    "paths": {
+      "#/*": ["./src/*"]
+    },
+  },
+  "exclude": ["node_modules", "worker/spark-md5.js"]
+}

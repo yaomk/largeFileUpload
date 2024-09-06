@@ -6,13 +6,20 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "dev:server": "npm run -w node-server dev"
+  },
+  "workspaces": ["node-server"],
+  "imports": {
+    "#/*": "./src/*"
   },
   "dependencies": {
+    "axios": "^1.7.7",
     "vue": "^3.4.37"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.1.2",
+    "sass": "^1.77.8",
     "vite": "^5.4.1"
   }
 }
