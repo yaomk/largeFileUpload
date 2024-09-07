@@ -40,8 +40,6 @@ async function calculateChunksHash(fileChunkList = []) {
 
   // 计算切片进度
   let percentage = 0
-  // 计算切片次数
-  let count = 0
 
   try {
     const fileHash = await loadNext()
@@ -63,7 +61,6 @@ async function calculateChunksHash(fileChunkList = []) {
       const reader = new FileReader()
       reader.readAsArrayBuffer(fileChunkList[index].chunkFile)
       reader.onload = e => {
-        count++
         spark.append(e.target.result)
         percentage += 100 / fileChunkList.length
         self.postMessage({
