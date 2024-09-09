@@ -33,7 +33,7 @@
           type="file"
           multiple
           class="is_input"
-          @change="hanldeUploadFile" />
+          @change="handleUploadFileChanage" />
       </div>
     </div>
   </div>
@@ -72,7 +72,7 @@ const cancelAll = () => {
 const workerMap = new WeakMap()
 
 // 输入框change事件
-const hanldeUploadFile = async (e) => {
+const handleUploadFileChanage = async (e) => {
   const fileEl = e.target
   // 如果没有文件内容
   if (!fileEl || fileEl.files?.length === 0) {
@@ -160,6 +160,7 @@ const useWorker = (file, inTaskArrItem) => {
  */
 const handleFileUploadStart = async (file, inTaskArrItem, fileChunkList) => {
   inTaskArrItem.state = 2
+  inTaskArrItem.percentage = 0
   const res = await checkFile({fileName: inTaskArrItem.fileName, fileHash: inTaskArrItem.fileHash})
   if (!res.success) return
   const { shouldUpload, uploadedList } = res.data
