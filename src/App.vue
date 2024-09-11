@@ -1,6 +1,7 @@
 <template>
   <div class="page">
     <div class="page_top">
+      <el-button type="primary">xxx</el-button>
       <p>正在上传 ({{ statistics }})</p>
       <div
         class="page_top_right"
@@ -8,12 +9,14 @@
           'justify-content':
             uploadFileList.length > 1 ? 'space-between' : 'flex-end',
         }">
-        <p
+        <!-- <p
           class="clear_btn"
           @click="cancelAll"
           v-if="uploadFileList.length > 1">
           全部取消
-        </p>
+        </p> -->
+        <el-button link type="danger" v-if="uploadFileList.length >= 1"
+          @click="cancelAll">全部取消</el-button>
       </div>
     </div>
     <div class="content" ref="contentRef">
@@ -40,10 +43,10 @@
 </template>
 <script setup>
 import { ref, reactive, computed, nextTick } from 'vue'
-// import { uploadFile, checkFile, mergeChunk } from '@/api/index.js'
 import ListItem from '#/components/ListItem.vue'
 import fileWroker from '#/worker/fileWorker.js?worker'
 import { mergeChunk, uploadFile, checkFile, delFile } from './api'
+import { ElMessage } from 'element-plus'
 console.log(fileWroker)
 
 
@@ -161,11 +164,12 @@ const useWorker = (file, inTaskArrItem) => {
 const handleFileUploadStart = async (file, inTaskArrItem, fileChunkList) => {
   inTaskArrItem.state = 2
   inTaskArrItem.percentage = 0
-  const res = await checkFile({fileName: inTaskArrItem.fileName, fileHash: inTaskArrItem.fileHash})
+  const res = await checkFile({ fileName: inTaskArrItem.fileName, fileHash: inTaskArrItem.fileHash })
   if (!res.success) return
   const { shouldUpload, uploadedList } = res.data
   if (!shouldUpload) {
     console.log(`文件: ${file.name} 已存在，无需上传`)
+    ElMessage.warning(`文件: ${file.name} 已存在，无需上传`)
     finishTask(inTaskArrItem)
     return
   }
@@ -268,6 +272,7 @@ const uploadSignFile = async (item) => {
       if (item.errNumber > 3) {
         pauseUpload(item, false)
         console.log("切片上传失败超过三次了，中断上传")
+        ElMessage.error("切片上传失败超过三次了，中断上传")
       } else {
         // 失败了一片,继续当前分片请求
         uploadChunk(chunk)
@@ -327,7 +332,7 @@ const cancelSingle = (item) => {
 
 // 删除已上传的文件
 const delSingle = (item) => {
-  delFile({ fileHash: item.fileHash , fileName: item.fileName})
+  delFile({ fileHash: item.fileHash, fileName: item.fileName })
   // 取消上传后删除该文件
   uploadFileList.value.splice(uploadFileList.value.indexOf(item), 1)
   handleInputFileDel()

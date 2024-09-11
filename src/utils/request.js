@@ -24,7 +24,12 @@ service.interceptors.response.use(
     return res.data
   },
   err => {
-    return Promise.reject(err)
+    return Promise.reject({
+      code: -1,
+      data: err,
+      msg: err.message,
+      success: false
+    })
   }
 )
 

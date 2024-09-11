@@ -36,21 +36,25 @@
       <!-- 右侧按钮 -->
       <div class="rightBtn">
         <!-- 必须解析完才能暂停，不然是没有接口取消调用的 -->
-        <div
+        <!-- <div
           class="my_btn dangerBtn"
           @click="pauseUpload(item)"
           v-if="[2].includes(item.state)">
           暂停
-        </div>
+        </div> -->
+        <el-button type="danger" v-if="[2].includes(item.state)" @click="pauseUpload(item)">暂停</el-button>
         <!-- 暂停中显示的继续按钮 -->
-        <div
+        <!-- <div
           class="my_btn primaryBtn"
           @click="resumeUpload(item)"
           v-if="[3, 5].includes(item.state)">
           继续
-        </div>
-        <div class="my_btn dangerBtn" v-if="item.state !== 4" @click="cancelSingle(item)">取消</div>
-        <div class="my_btn dangerBtn" v-else @click="delSingle(item)">删除</div>
+        </div> -->
+        <el-button type="primary" v-if="[3, 5].includes(item.state)" @click="resumeUpload(item)">继续</el-button>
+        <!-- <div class="my_btn dangerBtn" v-if="item.state !== 4" @click="cancelSingle(item)">取消</div> -->
+        <el-button type="warning" v-if="item.state !== 4" @click="cancelSingle(item)">取消</el-button>
+        <!-- <div class="my_btn dangerBtn" v-else @click="delSingle(item)">删除</div> -->
+        <el-button type="danger" v-else @click="delSingle(item)">删除</el-button>
       </div>
     </div>
   </div>

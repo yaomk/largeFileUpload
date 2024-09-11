@@ -1,11 +1,12 @@
 import request from '#/utils/request'
+import { ElMessage } from 'element-plus'
 
 export function uploadFile(data, cancelCb) {
   // 创建 AbortController 对象, 用于取消请求
   const controller = new AbortController()
   const signal = controller.signal
 
-  if(typeof cancelCb === 'function') {
+  if (typeof cancelCb === 'function') {
     // 用于接收 取消请求的回调函数
     cancelCb(() => controller.abort())
   }
@@ -58,9 +59,16 @@ function handlePromise(promise) {
   }
 }
 
-async function handleAxiosPromise(axiosRequest) {
+async function handleAxiosPromise(axiosRequest, showErrMessage = true) {
   const [err, res] = await handlePromise(axiosRequest)
-  console.log(err, res);
-  if (err) return err
+  console.log(err, res)
+  if (err) {
+    if (showErrMessage) {
+      ElMessage.error({
+        message: err.msg,
+      })
+    }
+    return err
+  }
   return res
 }

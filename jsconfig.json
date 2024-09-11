@@ -7,8 +7,10 @@
     "baseUrl": "./",
     "jsx": "preserve",
     "paths": {
-      "#/*": ["./src/*"]
+      "#/*": ["./src/*"],
+      "@/*": ["./src/*"]
     },
+    "types": ["element-plus/global"]
   },
   "exclude": ["node_modules", "worker/spark-md5.js"]
 }
