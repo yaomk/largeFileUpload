@@ -209,9 +209,33 @@ Express 本质上是一系列 middleware 的函数调用。
   * 内置中间件，如：`express.json([options])`，使用方式：`app.use(express.json({type: 'application/json'}))`
 
 
+## vite 插件：全局 loading 实现
 
+全局加载前置 loading，能够解决在开发环境中，因 vite 首次加载资源，会导致较长时间的白屏；在生产环境中，也能够解决因网络等问题导致 js 加载时间较长的白屏问题。
 
+* 在 index.html 中注入 loading 的代码
+* 在 main.js 中，将 loading 相关 dom 移除
 
+```js
+function viteInjectAppLoadingPlugin() {
+  const loadingHtml = `<div>loading...</div>`
+  if (!loadingHtml) return
+  return {
+    // pre 强制在 vite 核心插件之前调用该插件
+    enforce: 'pre',
+    name: 'vite:inject-app-loading',
+    // vite 独有的钩子之一：transformIndexHtml，转换 index.html 的专用钩子。
+    transformIndexHtml: {
+      handler(html) {
+        const re = /<body\s*>/
+        html = html.replace(re, `<body>${loadingHtml}`)
+        return html
+      },
+      // 处理 HTML 之前应用
+      order: 'pre'
+    }
+  }
+}
 
-
+```
 
