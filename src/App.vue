@@ -1,7 +1,6 @@
 <template>
   <div class="page">
     <div class="page_top">
-      <el-button type="primary">xxx</el-button>
       <p>正在上传 ({{ statistics }})</p>
       <div
         class="page_top_right"

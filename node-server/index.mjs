@@ -4,19 +4,47 @@ import fse from 'fs-extra'
 import multiparty from 'multiparty'
 import { Buffer } from 'node:buffer'
 
-const app = express()
 const port = 3000
 
+// 创建一个 express 实例
+const app = express()
+
+// 设置视图引擎为 ejs
+app.set('view engine', 'ejs')
+// 设置视图文件目录
+app.set('views', resolve(import.meta.dirname, 'views'))
+
+// 创建一个路由实例
+const router = express.Router()
+
+// 设置路由中间件
+router.use((req, res, next) => {
+  console.log(Date.now(), '路由级中间件')
+  next()
+})
+// 针对 /hello 路径，渲染一个页面
+router.get('/hello', (req, res) => {
+  // res.send('Hello World!')
+  res.render('index', { title: 'My Website', message: 'Hello, World!' })
+})
+
+// 将路由挂载到 express 实例上
+app.use('/', router)
+
+// 设置应用级中间件
 app.use((req, res, next) => {
   // 允许跨域
   res.setHeader('Access-Control-Allow-Origin', '*')
   res.setHeader('Access-Control-Allow-Headers', '*')
   next()
 })
+
+// 针对 OPTIONS 请求，返回 200 状态码
 app.options('*', (req, res) => {
   res.sendStatus(200)
 })
 
+// 监听端口
 app.listen(port, () => console.log('文件上传接口启动： 监听端口：' + port))
 
 // 文件存储目录
@@ -24,7 +52,7 @@ const UPLOAD_DIR = resolve(import.meta.dirname, 'fileTarget')
 
 // 上传
 app.post('/upload', async (req, res) => {
-  console.log(req)
+  // console.log(req)
   try {
     // 处理文件表单
     const form = new multiparty.Form()

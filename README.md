@@ -180,7 +180,33 @@ axios.post(url, data, { signal })
 controller.abort()
 ```
 
+## express 的使用
 
+### 最简示例
+```js
+import express from 'express'
+// 创建 express 实例
+const app = express()
+// 监听端口
+app.listen(3000)
+// curl http://localhost:3000/hello
+// get请求，返回响应
+app.get('/hello', (req, res) => {
+  res.send('hello world')
+})
+
+```
+
+### 中间件（middleware）
+Express 本质上是一系列 middleware 的函数调用。
+
+* 中间件函数: `(req, res, next) => {}`，请求对象，响应对象，next 函数。
+* 如果中间件没有结束请求响应周期，则必须调用 `next()`，否则请求会被挂起。（即该请求状态一直为 pending）
+* 中间件分为：
+  * 应用级中间件: 对整个应用生效，通用用于全局的日志记录、错误处理、身份校验等。
+  * 路由级中间件：只对其注册的路由或一组路由生效，通常用于特定路由上的预处理，例如权限检查、数据预处理等。
+  * 错误处理中间件（`(err, req, res, next) => {}`）
+  * 内置中间件，如：`express.json([options])`，使用方式：`app.use(express.json({type: 'application/json'}))`
 
 
 
